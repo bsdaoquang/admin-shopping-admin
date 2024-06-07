@@ -20,6 +20,11 @@ const SiderComponent = () => {
 			label: <Link href={'/users'}>Users</Link>,
 			icon: <BiUser />,
 		},
+		{
+			key: 'offers',
+			label: <Link href={'/offers'}>Offers</Link>,
+			icon: <BiUser />,
+		},
 	];
 
 	return (

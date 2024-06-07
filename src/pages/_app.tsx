@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
 			<Layout>
 				<SiderComponent />
 				<Content>
-					<div className='container-fuild bg-white'>
+					<div className='container-fuild '>
 						<div className='container p-4'>
 							<Component {...pageProps} />
 						</div>
