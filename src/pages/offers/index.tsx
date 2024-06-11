@@ -11,7 +11,9 @@ import { useRouter } from 'next/router';
 import { OfferModel } from '@/models/OfferModel';
 import { BiTrash } from 'react-icons/bi';
 import AvatarComponent from '@/components/AvatarComponent';
-import { HandleFile } from '@/utils/HandleFile';
+import { HandleFile } from '@/utils/handleFile';
+import { DateTime } from '@/utils/dateTime';
+import { HeadComponent } from '@/components';
 
 const { confirm } = Modal;
 
@@ -44,7 +46,7 @@ const Offers = () => {
 			dataIndex: 'files',
 			title: '',
 			render: (ids: string[]) =>
-				ids.length > 0 && <AvatarComponent id={ids[0]} path='files' />,
+				ids && ids.length > 0 && <AvatarComponent id={ids[0]} path='files' />,
 		},
 		{
 			key: 'Title',
@@ -58,13 +60,15 @@ const Offers = () => {
 		},
 		{
 			key: 'start',
-			dataIndex: 'start',
+			dataIndex: 'startAt',
 			title: 'Start at',
+			render: (time: number) => DateTime.getDate(time),
 		},
 		{
 			key: 'end',
-			dataIndex: 'end',
+			dataIndex: 'endAt',
 			title: 'End at',
+			render: (time: number) => DateTime.getDate(time),
 		},
 		{
 			key: 'code',
@@ -102,19 +106,22 @@ const Offers = () => {
 		}
 
 		await deleteDoc(doc(fs, `offers/${item.id}`));
-
-		console.log('Delete done');
 	};
 
 	return (
 		<>
-			<div className='text-right'>
-				<Button
-					type='primary'
-					onClick={() => router.push('/offers/add-new-offer')}>
-					Add new
-				</Button>
-			</div>
+			<HeadComponent
+				title='Offers'
+				pageTitle='Offers'
+				extra={
+					<Button
+						type='primary'
+						onClick={() => router.push('/offers/add-new-offer')}>
+						Add new
+					</Button>
+				}
+			/>
+
 			<Table dataSource={offers} columns={columns} />
 		</>
 	);

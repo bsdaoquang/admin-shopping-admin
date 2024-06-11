@@ -1,8 +1,10 @@
 export interface OfferModel {
-  id: string;
-  description: string;
-  title: string;
-  percent: string;
-  files: string[];
   code: string;
+  description: string;
+  endAt: number;
+  files: string[];
+  id: string;
+  percent: string;
+  startAt: number;
+  title: string;
 }

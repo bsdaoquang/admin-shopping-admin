@@ -4,6 +4,7 @@ import { Layout, Menu, MenuProps } from 'antd';
 import Link from 'next/link';
 import React from 'react';
 import { BiHome, BiUser } from 'react-icons/bi';
+import { IoMdPricetag } from 'react-icons/io';
 
 type MenuItem = Required<MenuProps>['items'][number];
 const { Sider } = Layout;
@@ -24,6 +25,11 @@ const SiderComponent = () => {
 			key: 'offers',
 			label: <Link href={'/offers'}>Offers</Link>,
 			icon: <BiUser />,
+		},
+		{
+			key: 'categories',
+			label: <Link href={'/categories'}>Categories</Link>,
+			icon: <IoMdPricetag />,
 		},
 	];
 

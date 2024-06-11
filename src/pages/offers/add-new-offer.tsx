@@ -2,12 +2,14 @@
 
 import { ImagePicker } from '@/components';
 import { fs } from '@/firebase/firabaseConfig';
-import { HandleFile } from '@/utils/HandleFile';
 import { generatorRandomText } from '@/utils/generatorRadomText';
-import { Button, Card, Form, Input } from 'antd';
+import { HandleFile } from '@/utils/handleFile';
+import { Button, Card, DatePicker, Form, Input } from 'antd';
 import { addDoc, collection } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 
+const date = new Date();
 const AddNewOffer = () => {
 	const [files, setFiles] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +27,9 @@ const AddNewOffer = () => {
 		for (const i in values) {
 			data[`${i}`] = values[i] ?? '';
 		}
+
+		data.startAt = new Date(values.startAt.$d).getTime();
+		data.endAt = new Date(values.endAt.$d).getTime();
 
 		try {
 			const snap = await addDoc(collection(fs, 'offers'), data);
@@ -64,6 +69,21 @@ const AddNewOffer = () => {
 					<Form.Item name={'description'} label='Description'>
 						<Input.TextArea rows={2} placeholder='Description' allowClear />
 					</Form.Item>
+					<div className='row'>
+						<div className='col'>
+							<Form.Item
+								name={'startAt'}
+								initialValue={dayjs(date)}
+								label='Start at'>
+								<DatePicker style={{ width: '100%' }} format={'DD/MM/YYYY'} />
+							</Form.Item>
+						</div>
+						<div className='col'>
+							<Form.Item name={'endAt'} label='End at'>
+								<DatePicker style={{ width: '100%' }} format={'DD/MM/YYYY'} />
+							</Form.Item>
+						</div>
+					</div>
 					<Form.Item name={'percent'} label='percent'>
 						<Input type='number' placeholder='percent' allowClear />
 					</Form.Item>
