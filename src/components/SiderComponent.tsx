@@ -3,7 +3,9 @@
 import { Layout, Menu, MenuProps } from 'antd';
 import Link from 'next/link';
 import React from 'react';
+import { AiOutlineProduct } from 'react-icons/ai';
 import { BiHome, BiUser } from 'react-icons/bi';
+import { FaPercentage } from 'react-icons/fa';
 import { IoMdPricetag } from 'react-icons/io';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -24,12 +26,17 @@ const SiderComponent = () => {
 		{
 			key: 'offers',
 			label: <Link href={'/offers'}>Offers</Link>,
-			icon: <BiUser />,
+			icon: <FaPercentage />,
 		},
 		{
 			key: 'categories',
 			label: <Link href={'/categories'}>Categories</Link>,
 			icon: <IoMdPricetag />,
+		},
+		{
+			key: 'products',
+			label: <Link href={'/products'}>Products</Link>,
+			icon: <AiOutlineProduct />,
 		},
 	];
 
