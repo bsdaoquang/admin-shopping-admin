@@ -6,7 +6,7 @@ import { handleResize } from './resizeImage';
 import path from 'path';
 
 export class HandleFile {
-  static HandleFiles = (files: any, id: string) => {
+  static HandleFiles = async (files: any, id: string, collectionName: string) => {
     const items: any[] = [];
 
     for (const i in files) {
@@ -19,11 +19,11 @@ export class HandleFile {
 
     items.forEach(async item => {
       const newFile = await handleResize(item);
-      await this.UploadToStore(newFile, id);
+      await this.UploadToStore(newFile, id, collectionName);
     });
   };
 
-  static UploadToStore = async (file: any, id: string) => {
+  static UploadToStore = async (file: any, id: string, collectionName: string) => {
     const filename = replaceName(file.name);
     const path = `/images/${filename}`;
     const storageRef = ref(storage, path);
@@ -33,7 +33,7 @@ export class HandleFile {
     if (res) {
       if (res.metadata.size === file.size) {
         const url = await getDownloadURL(storageRef);
-        await this.SaveToFirestore({ downloadUrl: url, path, id });
+        await this.SaveToFirestore({ downloadUrl: url, path, id, name: collectionName });
       } else {
         return 'uploading';
       }
@@ -42,7 +42,7 @@ export class HandleFile {
     }
   };
 
-  static SaveToFirestore = async ({ path, downloadUrl, id }: { path: string, downloadUrl: string, id: string; }) => {
+  static SaveToFirestore = async ({ path, downloadUrl, id, name }: { path: string, downloadUrl: string, id: string; name: string; }) => {
     try {
       const snap = await addDoc(collection(fs, 'files'), {
         path,
@@ -52,7 +52,7 @@ export class HandleFile {
       const fileId = snap.id;
 
       if (fileId) {
-        await updateDoc(doc(fs, `offers/${id}`), {
+        await updateDoc(doc(fs, `${name}/${id}`), {
           files: arrayUnion(fileId)
         });
       }

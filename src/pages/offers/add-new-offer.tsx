@@ -35,7 +35,7 @@ const AddNewOffer = () => {
 			const snap = await addDoc(collection(fs, 'offers'), data);
 
 			if (files) {
-				HandleFile.HandleFiles(files, snap.id);
+				HandleFile.HandleFiles(files, snap.id, 'offers');
 			}
 
 			form.resetFields();

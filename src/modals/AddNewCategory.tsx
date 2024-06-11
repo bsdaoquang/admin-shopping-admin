@@ -1,7 +1,10 @@
 /** @format */
 
 import { ImagePicker } from '@/components';
-import { Form, Input, Modal } from 'antd';
+import { fs } from '@/firebase/firabaseConfig';
+import { HandleFile } from '@/utils/handleFile';
+import { Form, Input, Modal, message } from 'antd';
+import { addDoc, collection } from 'firebase/firestore';
 import React, { useState } from 'react';
 
 type Props = {
@@ -17,16 +20,40 @@ const AddNewCategory = (props: Props) => {
 	const [files, setFiles] = useState<any[]>([]);
 
 	const handleClose = () => {
+		settitle('');
+		setFiles([]);
 		onClose();
 	};
 
 	const handleAddNewCategory = async (values: any) => {
-		console.log(values);
+		if (!title) {
+			message.error('Missing category title');
+		} else if (files.length === 0) {
+			message.error('Missing image');
+		} else {
+			setIsLoading(true);
+
+			try {
+				const snap = await addDoc(collection(fs, 'categories'), {
+					title,
+				});
+
+				if (files && files.length > 0) {
+					await HandleFile.HandleFiles(files, snap.id, 'categories');
+				}
+				handleClose();
+				setIsLoading(false);
+			} catch (error: any) {
+				message.error(error.message);
+				setIsLoading(false);
+			}
+		}
 	};
 
 	return (
 		<Modal
 			open={visible}
+			onOk={handleAddNewCategory}
 			loading={isLoading}
 			onCancel={handleClose}
 			title='Add new category'>
@@ -37,6 +64,8 @@ const AddNewCategory = (props: Props) => {
 					maxLength={150}
 					showCount
 					allowClear
+					value={title}
+					onChange={(val) => settitle(val.target.value)}
 				/>
 				{files.length > 0 && (
 					<div className='mt-4'>
