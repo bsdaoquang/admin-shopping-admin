@@ -4,7 +4,14 @@ import { ColumnProps } from 'antd/es/table';
 import { Button, Modal, Space, Table } from 'antd';
 
 import React, { useEffect, useState } from 'react';
-import { collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore';
+import {
+	collection,
+	deleteDoc,
+	doc,
+	getDoc,
+	onSnapshot,
+	updateDoc,
+} from 'firebase/firestore';
 import { fs } from '@/firebase/firabaseConfig';
 import { collectionNames } from '@/constants/collectionNames';
 import { useRouter } from 'next/router';
@@ -108,6 +115,26 @@ const Offers = () => {
 		await deleteDoc(doc(fs, `offers/${item.id}`));
 	};
 
+	// const handleUpdate = async () => {
+	// 	if (offers.length > 0) {
+	// 		offers.forEach(async (cat) => {
+	// 			if (cat.files && cat.files.length > 0) {
+	// 				const fileId = cat.files[0];
+
+	// 				const snap = await getDoc(doc(fs, `files/${fileId}`));
+	// 				if (snap.exists()) {
+	// 					const data = snap.data();
+	// 					await updateDoc(doc(fs, `offers/${cat.id}`), {
+	// 						imageUrl: data.downloadUrl,
+	// 					});
+
+	// 					console.log('Done');
+	// 				}
+	// 			}
+	// 		});
+	// 	}
+	// };
+
 	return (
 		<>
 			<HeadComponent
@@ -121,7 +148,6 @@ const Offers = () => {
 					</Button>
 				}
 			/>
-
 			<Table dataSource={offers} columns={columns} />
 		</>
 	);

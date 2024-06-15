@@ -7,7 +7,13 @@ import { AddNewCategory } from '@/modals';
 import { CategoryModel } from '@/models/CategoryModel';
 import { Button, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
-import { collection, onSnapshot } from 'firebase/firestore';
+import {
+	collection,
+	doc,
+	getDoc,
+	onSnapshot,
+	updateDoc,
+} from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
 const Categories = () => {
