@@ -45,11 +45,13 @@ const Categories = () => {
 		{
 			key: 'img',
 			dataIndex: '',
-			render: (item: CategoryModel) =>
-				item.files &&
-				item.files.length > 0 && (
-					<AvatarComponent id={item.files[0]} path='files' />
-				),
+			render: (item: CategoryModel) => (
+				<AvatarComponent
+					imageUrl={item.imageUrl}
+					id={item.files && item.files.length > 0 ? item.files[0] : undefined}
+					path='files'
+				/>
+			),
 		},
 		{
 			key: 'title',

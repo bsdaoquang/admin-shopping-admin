@@ -53,7 +53,8 @@ export class HandleFile {
 
       if (fileId) {
         await updateDoc(doc(fs, `${name}/${id}`), {
-          files: arrayUnion(fileId)
+          files: arrayUnion(fileId),
+          imageUrl: downloadUrl
         });
       }
     } catch (error) {
