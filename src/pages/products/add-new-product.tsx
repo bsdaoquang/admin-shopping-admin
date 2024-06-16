@@ -38,6 +38,7 @@ const AddNewProduct = () => {
 				...data,
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
+				rate: 0,
 			});
 
 			if (files) {

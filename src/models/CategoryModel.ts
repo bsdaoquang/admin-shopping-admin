@@ -3,4 +3,6 @@ export interface CategoryModel {
   files: string[];
   title: string;
   imageUrl: string;
+  createdAt: number,
+  updatedAt: number;
 }
