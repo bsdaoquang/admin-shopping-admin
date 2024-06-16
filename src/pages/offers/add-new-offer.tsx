@@ -32,7 +32,11 @@ const AddNewOffer = () => {
 		data.endAt = new Date(values.endAt.$d).getTime();
 
 		try {
-			const snap = await addDoc(collection(fs, 'offers'), data);
+			const snap = await addDoc(collection(fs, 'offers'), {
+				...data,
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+			});
 
 			if (files) {
 				HandleFile.HandleFiles(files, snap.id, 'offers');

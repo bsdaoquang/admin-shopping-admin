@@ -42,6 +42,8 @@ const AddSubProduct = () => {
 				const snap = await addDoc(collection(fs, 'subProducts'), {
 					...data,
 					productId: id,
+					createdAt: Date.now(),
+					updatedAt: Date.now(),
 				});
 
 				if (files) {

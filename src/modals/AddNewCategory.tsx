@@ -36,6 +36,8 @@ const AddNewCategory = (props: Props) => {
 			try {
 				const snap = await addDoc(collection(fs, 'categories'), {
 					title,
+					createdAt: Date.now(),
+					updatedAt: Date.now(),
 				});
 
 				if (files && files.length > 0) {

@@ -34,7 +34,11 @@ const AddNewProduct = () => {
 		}
 
 		try {
-			const snap = await addDoc(collection(fs, 'products'), data);
+			const snap = await addDoc(collection(fs, 'products'), {
+				...data,
+				createdAt: Date.now(),
+				updatedAt: Date.now(),
+			});
 
 			if (files) {
 				HandleFile.HandleFiles(files, snap.id, 'products');
