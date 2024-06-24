@@ -17,7 +17,7 @@ const ImagePicker = (props: Props) => {
 	const fileRef = useRef<any>(null);
 
 	return (
-		<>
+		<div>
 			<Button
 				loading={loading}
 				className='mt-2'
@@ -40,7 +40,7 @@ const ImagePicker = (props: Props) => {
 					id=''
 				/>
 			</div>
-		</>
+		</div>
 	);
 };
 

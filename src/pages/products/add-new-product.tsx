@@ -3,26 +3,57 @@
 import { HeadComponent, ImagePicker } from '@/components';
 import { fs } from '@/firebase/firabaseConfig';
 import { AddNewCategory } from '@/modals';
-import { CategoryModel } from '@/models/CategoryModel';
 import { HandleFile } from '@/utils/handleFile';
-import { Button, Card, Form, Input, Select, Space, message } from 'antd';
-import { OptionProps } from 'antd/es/select';
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, Form, Image, Input, Select, message } from 'antd';
+import {
+	addDoc,
+	collection,
+	doc,
+	getDoc,
+	onSnapshot,
+	updateDoc,
+} from 'firebase/firestore';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { BiAddToQueue } from 'react-icons/bi';
 
 const AddNewProduct = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [files, setFiles] = useState<any[]>([]);
+	const [imgUrl, setImgUrl] = useState('');
 	const [categories, setCategories] = useState<any[]>([]);
 	const [isVisibleModalAddCategory, setIsVisibleModalAddCategory] =
 		useState(false);
 
 	const [form] = Form.useForm();
+	const searchParams = useSearchParams();
+	const id = searchParams.get('id');
+
+	useEffect(() => {
+		id && getProductDetail(id);
+	}, [id]);
 
 	useEffect(() => {
 		getCategories();
 	}, []);
+
+	const getProductDetail = async (id: string) => {
+		try {
+			const snap = await getDoc(doc(fs, `products/${id}`));
+			if (snap.exists()) {
+				const data = snap.data();
+
+				form.setFieldsValue(data);
+
+				if (data.imageUrl) {
+					setImgUrl(data.imageUrl);
+				}
+			} else {
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const handleAddNewProduct = async (values: any) => {
 		setIsLoading(true);
@@ -34,15 +65,22 @@ const AddNewProduct = () => {
 		}
 
 		try {
-			const snap = await addDoc(collection(fs, 'products'), {
-				...data,
-				createdAt: Date.now(),
-				updatedAt: Date.now(),
-				rate: 0,
-			});
+			data.updatedAt = Date.now();
 
-			if (files) {
-				HandleFile.HandleFiles(files, snap.id, 'products');
+			const snap = id
+				? await updateDoc(doc(fs, `products/${id}`), data)
+				: await addDoc(collection(fs, 'products'), {
+						...data,
+						createdAt: Date.now(),
+						rate: 0,
+				  });
+
+			if (files && (snap || id)) {
+				HandleFile.HandleFiles(
+					files,
+					id ? id : snap ? snap.id : '',
+					'products'
+				);
 			}
 			setIsLoading(false);
 			window.history.back();
@@ -131,6 +169,12 @@ const AddNewProduct = () => {
 								alt=''
 							/>
 						</div>
+					)}
+
+					{files.length === 0 && imgUrl ? (
+						<Image src={imgUrl} style={{ width: 200 }} />
+					) : (
+						<></>
 					)}
 					<ImagePicker
 						loading={isLoading}

@@ -79,6 +79,7 @@ const AddSubProduct = () => {
 						</Form.Item>
 						<Form.Item name={'size'} label='Size'>
 							<Select
+								mode='multiple'
 								dropdownRender={(menu) => (
 									<>
 										{menu}
@@ -104,6 +105,9 @@ const AddSubProduct = () => {
 							</Select>
 						</Form.Item>
 						<Form.Item name={'price'} label='Price'>
+							<Input type='number' />
+						</Form.Item>
+						<Form.Item name={'quantity'} label='Quantity'>
 							<Input type='number' />
 						</Form.Item>
 					</Form>

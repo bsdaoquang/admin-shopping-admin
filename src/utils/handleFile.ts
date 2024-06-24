@@ -44,20 +44,15 @@ export class HandleFile {
 
   static SaveToFirestore = async ({ path, downloadUrl, id, name }: { path: string, downloadUrl: string, id: string; name: string; }) => {
     try {
-      const snap = await addDoc(collection(fs, 'files'), {
-        path,
-        downloadUrl
+      await updateDoc(doc(fs, `${name}/${id}`), {
+        files: arrayUnion({
+          path,
+          downloadUrl
+        }),
+        imageUrl: downloadUrl,
+        updatedAt: Date.now()
       });
 
-      const fileId = snap.id;
-
-      if (fileId) {
-        await updateDoc(doc(fs, `${name}/${id}`), {
-          files: arrayUnion(fileId),
-          imageUrl: downloadUrl,
-          updatedAt: Date.now()
-        });
-      }
     } catch (error) {
       console.log(error);
     }
